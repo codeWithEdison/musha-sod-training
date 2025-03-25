@@ -105,15 +105,15 @@ app.post('/api/register', async (req, res) => {
 // Login user
 app.post('/api/login', (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
     
     // Validate input
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required' });
+    if (!username || !password) {
+      return res.status(400).json({ message: 'password  and password are required' });
     }
     
     // Find user by email
-    db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+    db.query('SELECT * FROM users WHERE username = ?', [username], async (err, results) => {
       if (err) {
         return res.status(500).json({ message: 'Database error', error: err.message });
       }
