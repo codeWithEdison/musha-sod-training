@@ -1,0 +1,9 @@
+libralies
+
+- express - js framework for creating backend application
+- mysql2 - js libralies for intecting database
+-bcrypt - js libralies for  hashing  and compare hasing value
+-jwt  - json web token 
+- bodyparser - middleware for parse json database
+-cors - handle cors 
+-dotenv : 
