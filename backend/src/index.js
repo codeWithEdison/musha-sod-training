@@ -85,7 +85,7 @@ app.post('/api/register', async (req, res) => {
         
         // Return created user without password
         db.query(
-          'SELECT id, username, email, created_at FROM users WHERE id = ?',
+          'SELECT * FROM users WHERE id = ?',
           [result.insertId],
           (err, rows) => {
             if (err) {
@@ -148,7 +148,7 @@ app.post('/api/login', (req, res) => {
 app.get('/api/users', authenticateToken, (req, res) => {
   try {
     db.query(
-      'SELECT id, username, email, created_at, updated_at FROM users',
+      'SELECT id, username, email, create_at, update_at FROM users',
       (err, results) => {
         if (err) {
           return res.status(500).json({ message: 'Database error', error: err.message });
@@ -166,7 +166,7 @@ app.get('/api/users', authenticateToken, (req, res) => {
 app.get('/api/users/:id', authenticateToken, (req, res) => {
   try {
     db.query(
-      'SELECT id, username, email, created_at, updated_at FROM users WHERE id = ?',
+      'SELECT id, username, email, create_at, update_at FROM users WHERE id = ?',
       [req.params.id],
       (err, results) => {
         if (err) {
@@ -242,7 +242,7 @@ app.put('/api/users/:id', authenticateToken, (req, res) => {
         
         // Return updated user
         db.query(
-          'SELECT id, username, email, created_at, updated_at FROM users WHERE id = ?',
+          'SELECT id, username, email, create_at, update_at FROM users WHERE id = ?',
           [userId],
           (err, rows) => {
             if (err) {
