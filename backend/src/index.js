@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2');
 const cors = require('cors');
-const dotenv = require('dotenv');
+const dotenv = require('dotenv'); 
 
 // Load environment variables from .env file
 dotenv.config();
@@ -188,13 +188,13 @@ app.get('/api/users/:id', authenticateToken, (req, res) => {
 // Update user (protected route)
 app.put('/api/users/:id', authenticateToken, (req, res) => {
   try {
-    const { username, email } = req.body;
+    const { username, email } = req.body; 
     const userId = parseInt(req.params.id);
     
     // Ensure users can only update their own account
-    if (req.user.id !== userId) {
-      return res.status(403).json({ message: 'Access denied: You can only update your own account' });
-    }
+    // if (req.user.id !== userId) {
+    //   return res.status(403).json({ message: 'Access denied: You can only update your own account' });
+    // }
     
     // Check if user exists
     db.query('SELECT * FROM users WHERE id = ?', [userId], (err, results) => {
@@ -210,28 +210,29 @@ app.put('/api/users/:id', authenticateToken, (req, res) => {
       const updates = [];
       const values = [];
       
-      if (username) {
-        updates.push('username = ?');
-        values.push(username);
-      }
+      // if (username) {
+      //   updates.push('username = ?');
+      //   values.push(username);
+      // }
       
-      if (email) {
-        updates.push('email = ?');
-        values.push(email);
-      }
+      // if (email) {
+      //   updates.push('email = ?');
+      //   values.push(email);
+      // }
       
-      // If no fields to update
-      if (updates.length === 0) {
-        return res.status(400).json({ message: 'No fields to update' });
-      }
+      // // If no fields to update
+      // if (updates.length === 0) {
+      //   return res.status(400).json({ message: 'No fields to update' });
+      // }
       
       // Add user ID to values array
-      values.push(userId);
+      // values.push(userId);
       
       // Update user
-      const updateQuery = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`;
+      // const updateQuery = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`;
+      const updateQuery = `UPDATE users set username = ? ,  email = ? WHERE id= ?`
       
-      db.query(updateQuery, values, (err, result) => {
+      db.query(updateQuery, [username, email, userId], (err, result) => { 
         if (err) {
           return res.status(500).json({ message: 'Error updating user', error: err.message });
         }
