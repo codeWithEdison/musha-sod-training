@@ -1,35 +1,61 @@
-import React from "react";
+"use client"
 
-export interface Post {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-}
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'next/navigation'
 
-// Server-side function to fetch a single post
-const getPost = async (id: string) => {
-  const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch post");
+interface Post {
+    userId: number;
+    id: number;
+    title: string;
+    body: string;
   }
 
-  return response.json();
-};
 
-const PostDetails = async ({ params }: { params: { id: string } }) => {
-  const post: Post = await getPost(params.id); // Fetch post based on dynamic ID
+const Post = () => {
+    const {id} = useParams();
+     const [post, setPost] = useState<Post | null>(null);
+     const [error, setError] = useState<string | null>(null);
+     const [loading, setloading] = useState(true);
+
+     useEffect(() => {
+
+        if(!id) return ;
+
+     
+            const fetchPost = async () =>{
+try{
+    const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch post");
+    }
+    const data:Post = await response.json();
+    setPost(data);
+}
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            catch(error){
+                setError('Failed to fetch post');
+            }
+            finally{
+                setloading(false)
+            }
+        
+     }
+        fetchPost()
+        
+    }, [id])
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-4">Post Details</h1>
-      <div className="bg-gray-50 p-4 m-4 shadow-md rounded-lg">
-        <h2 className="text-md font-bold text-black">{post.title}</h2>
-        <p className="text-sm font-bold text-black">{post.body}</p>
-      </div>
-    </div>
-  );
-};
+<div>
+    {loading && <p>Loading...</p>}
+    {error && <p>Error: {error}</p>}
+    {post && (
+        <div>
+            <h1>{post.title}</h1>
+            <p>{post.body}</p>
+        </div>
+    )}
+ </div>
+  )
+}
 
-export default PostDetails;
+export default Post
